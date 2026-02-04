@@ -1,8 +1,5 @@
 package dev.zarr.zarrjava;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zarr.zarrjava.core.Attributes;
 import dev.zarr.zarrjava.store.FilesystemStore;
 import dev.zarr.zarrjava.store.HttpStore;
@@ -23,6 +20,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import software.amazon.awssdk.thirdparty.jackson.core.JsonParseException;
 import ucar.ma2.MAMath;
 
 import java.io.BufferedReader;
@@ -41,6 +39,9 @@ import java.util.stream.Stream;
 import static dev.zarr.zarrjava.core.ArrayMetadata.parseFillValue;
 import static dev.zarr.zarrjava.core.Node.ZARR_JSON;
 import static org.junit.Assert.assertThrows;
+
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
 
 public class ZarrV3Test extends ZarrTest {
 
@@ -452,7 +453,7 @@ public class ZarrV3Test extends ZarrTest {
         ).metadata().storageTransformers;
         assert storageTransformersEmpty.length == 0;
 
-        assertThrows(JsonMappingException.class, () -> Array.open(
+        assertThrows(JsonParseException.class, () -> Array.open(
                 new FilesystemStore(TESTDATA).resolve("storage_transformer", "exists"))
         );
 

@@ -1,14 +1,17 @@
 package dev.zarr.zarrjava.v3;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.store.FilesystemStore;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.utils.Utils;
 import dev.zarr.zarrjava.v3.codec.CodecRegistry;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,10 +22,19 @@ import java.nio.file.Paths;
 public interface Node extends dev.zarr.zarrjava.core.Node {
 
     static ObjectMapper makeObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        /*ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
         objectMapper.registerSubtypes(CodecRegistry.getNamedTypes());
         objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+        return objectMapper;*/
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .registerSubtypes(CodecRegistry.getNamedTypes())
+                .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+                .build();
+
         return objectMapper;
     }
 

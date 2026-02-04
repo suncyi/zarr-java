@@ -1,12 +1,12 @@
 package dev.zarr.zarrjava.v3;
 
-import com.fasterxml.jackson.databind.ObjectWriter;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.Attributes;
 import dev.zarr.zarrjava.store.FilesystemStore;
 import dev.zarr.zarrjava.store.MemoryStore;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.utils.Utils;
+import tools.jackson.databind.ObjectWriter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

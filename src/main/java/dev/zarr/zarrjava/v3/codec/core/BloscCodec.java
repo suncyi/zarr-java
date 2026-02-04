@@ -3,15 +3,16 @@ package dev.zarr.zarrjava.v3.codec.core;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import software.amazon.awssdk.thirdparty.jackson.core.JsonParseException;
+import software.amazon.awssdk.thirdparty.jackson.core.exc.StreamReadException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.ser.std.StdSerializer;
 import com.scalableminds.bloscjava.Blosc;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.utils.Utils;
@@ -67,8 +68,7 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
 
         @Override
         public void serialize(Blosc.Shuffle shuffle, JsonGenerator generator,
-                              SerializerProvider provider)
-                throws IOException {
+                              SerializationContext context) {
             switch (shuffle) {
                 case NO_SHUFFLE:
                     generator.writeString("noshuffle");
@@ -94,10 +94,8 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
         }
 
         @Override
-        public Blosc.Shuffle deserialize(JsonParser jsonParser, DeserializationContext ctxt)
-                throws IOException {
-            String shuffle = jsonParser.getCodec()
-                    .readValue(jsonParser, String.class);
+        public Blosc.Shuffle deserialize(JsonParser jsonParser, DeserializationContext ctxt) {
+            String shuffle = jsonParser.getValueAsString();
             switch (shuffle) {
                 case "noshuffle":
                     return Blosc.Shuffle.NO_SHUFFLE;
@@ -106,7 +104,7 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
                 case "shuffle":
                     return Blosc.Shuffle.BYTE_SHUFFLE;
                 default:
-                    throw new JsonParseException(
+                    throw new tools.jackson.core.exc.StreamReadException(
                             jsonParser,
                             String.format(
                                     "Could not parse the value for Blosc.Shuffle." + " Got '%s'",

@@ -1,24 +1,24 @@
 package dev.zarr.zarrjava.v2.codec.core;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.scalableminds.bloscjava.Blosc;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.ArrayMetadata;
 import dev.zarr.zarrjava.utils.Utils;
 import dev.zarr.zarrjava.v2.codec.Codec;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec implements Codec {
@@ -96,9 +96,7 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
         }
 
         @Override
-        public void serialize(Blosc.Shuffle shuffle, JsonGenerator generator,
-                              SerializerProvider provider)
-                throws IOException {
+        public void serialize(Blosc.Shuffle shuffle, JsonGenerator generator, SerializationContext context) {
             generator.writeNumber(shuffle.ordinal());
         }
     }
@@ -114,10 +112,8 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
         }
 
         @Override
-        public Blosc.Shuffle deserialize(JsonParser jsonParser, DeserializationContext ctxt)
-                throws IOException {
-            int shuffle = jsonParser.getCodec()
-                    .readValue(jsonParser, int.class);
+        public Blosc.Shuffle deserialize(JsonParser jsonParser, DeserializationContext ctxt) {
+            int shuffle = jsonParser.getValueAsInt();
             return Blosc.Shuffle.values()[shuffle];
         }
     }

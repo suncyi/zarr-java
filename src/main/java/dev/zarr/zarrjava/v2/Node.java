@@ -1,12 +1,18 @@
 package dev.zarr.zarrjava.v2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.store.FilesystemStore;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.v2.codec.CodecRegistry;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -16,9 +22,19 @@ import java.nio.file.Paths;
 public interface Node extends dev.zarr.zarrjava.core.Node {
 
     static ObjectMapper makeObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        /*ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
         objectMapper.registerSubtypes(CodecRegistry.getNamedTypes());
+        return objectMapper;*/
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .registerSubtypes(CodecRegistry.getNamedTypes())
+                .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                .enable(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES) // 添加这一行
+                .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+                .build();
         return objectMapper;
     }
 
