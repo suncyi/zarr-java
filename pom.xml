@@ -47,9 +47,11 @@
         <jackson.version>3.0.4</jackson.version>
         <aws.version>2.34.6</aws.version>
         <netcdfJavaVersion>5.9.1</netcdfJavaVersion>
-        <zstdVersion>1.5.5-7</zstdVersion>
+        <!--<zstdVersion>1.5.5-7</zstdVersion>-->
+        <zstdVersion>1.5.7-6</zstdVersion>
         <junit-jupiter-version>5.14.0</junit-jupiter-version>
         <findbugs.version>3.0.2</findbugs.version>
+        <maven.javadoc.skip>true</maven.javadoc.skip> <!-- 添加此属性 -->
     </properties>
 
     <dependencies>
@@ -230,7 +232,7 @@
                     <source>8</source>
                 </configuration>
             </plugin>
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>
@@ -246,7 +248,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
