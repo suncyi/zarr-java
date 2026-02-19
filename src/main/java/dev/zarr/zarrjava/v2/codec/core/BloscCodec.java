@@ -104,7 +104,7 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
     public static final class CustomShuffleDeserializer extends StdDeserializer<Blosc.Shuffle> {
 
         public CustomShuffleDeserializer() {
-            this(null);
+            this(Blosc.Shuffle.class);
         }
 
         public CustomShuffleDeserializer(Class<?> vc) {

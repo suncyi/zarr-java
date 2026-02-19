@@ -12,7 +12,6 @@ import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public abstract class BloscCodec extends BytesBytesCodec {
@@ -30,7 +29,7 @@ public abstract class BloscCodec extends BytesBytesCodec {
     public static final class CustomCompressorDeserializer extends StdDeserializer<Blosc.Compressor> {
 
         public CustomCompressorDeserializer() {
-            this(null);
+            this(Blosc.Compressor.class);
         }
 
         public CustomCompressorDeserializer(Class<?> vc) {

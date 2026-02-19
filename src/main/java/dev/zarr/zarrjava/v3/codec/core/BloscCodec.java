@@ -3,8 +3,11 @@ package dev.zarr.zarrjava.v3.codec.core;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import software.amazon.awssdk.thirdparty.jackson.core.JsonParseException;
-import software.amazon.awssdk.thirdparty.jackson.core.exc.StreamReadException;
+import com.scalableminds.bloscjava.Blosc;
+import dev.zarr.zarrjava.ZarrException;
+import dev.zarr.zarrjava.utils.Utils;
+import dev.zarr.zarrjava.v3.ArrayMetadata;
+import dev.zarr.zarrjava.v3.codec.Codec;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
@@ -13,14 +16,8 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import tools.jackson.databind.deser.std.StdDeserializer;
 import tools.jackson.databind.ser.std.StdSerializer;
-import com.scalableminds.bloscjava.Blosc;
-import dev.zarr.zarrjava.ZarrException;
-import dev.zarr.zarrjava.utils.Utils;
-import dev.zarr.zarrjava.v3.ArrayMetadata;
-import dev.zarr.zarrjava.v3.codec.Codec;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec implements Codec {
@@ -86,7 +83,7 @@ public class BloscCodec extends dev.zarr.zarrjava.core.codec.core.BloscCodec imp
     public static final class CustomShuffleDeserializer extends StdDeserializer<Blosc.Shuffle> {
 
         public CustomShuffleDeserializer() {
-            this(null);
+            this(Blosc.Shuffle.class);
         }
 
         public CustomShuffleDeserializer(Class<?> vc) {
