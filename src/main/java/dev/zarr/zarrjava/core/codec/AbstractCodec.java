@@ -4,7 +4,13 @@ import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.ArrayMetadata;
 
 public abstract class AbstractCodec implements Codec {
+
+
     protected ArrayMetadata.CoreArrayMetadata arrayMetadata;
+
+    public String getName() {
+        return "blosc";
+    }
 
     public ArrayMetadata.CoreArrayMetadata resolveArrayMetadata() throws ZarrException {
         if (arrayMetadata == null) {

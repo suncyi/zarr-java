@@ -6,11 +6,15 @@ import dev.zarr.zarrjava.store.FilesystemStore;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.utils.Utils;
 import dev.zarr.zarrjava.v3.codec.CodecRegistry;
+import dev.zarr.zarrjava.v3.codec.core.BloscCodec;
+import dev.zarr.zarrjava.v3.codec.core.BytesCodec;
+import tools.jackson.core.StreamReadFeature;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.ObjectWriter;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.NamedType;
 import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
@@ -32,8 +36,12 @@ public interface Node extends dev.zarr.zarrjava.core.Node {
                 .registerSubtypes(CodecRegistry.getNamedTypes())
                 .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
                 .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+                .registerSubtypes(new NamedType(BytesCodec.class, "bytes"),
+                        new NamedType(BloscCodec.class, "blosc"))
                 .build();
+
 
         return objectMapper;
     }

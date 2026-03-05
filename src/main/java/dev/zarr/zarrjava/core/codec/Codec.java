@@ -4,6 +4,9 @@ import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.ArrayMetadata;
 
 public interface Codec {
+
+    String getName();
+
     void setCoreArrayMetadata(ArrayMetadata.CoreArrayMetadata codecArrayMetadata) throws ZarrException;
 
     ArrayMetadata.CoreArrayMetadata resolveArrayMetadata() throws ZarrException;
