@@ -5,6 +5,8 @@ import dev.zarr.zarrjava.core.Node;
 import dev.zarr.zarrjava.experimental.ome.metadata.MultiscalesEntry;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.utils.Utils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,14 +60,14 @@ public interface MultiscaleImage {
         // Try v0.5: labels/zarr.json with {"attributes": {"labels": [...]}}
         StoreHandle zarrJson = labelsHandle.resolve(Node.ZARR_JSON);
         if (zarrJson.exists()) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = dev.zarr.zarrjava.v3.Node.makeObjectMapper();
+            ObjectMapper mapper = dev.zarr.zarrjava.v3.Node.makeObjectMapper();
             byte[] bytes = Utils.toArray(zarrJson.readNonNull());
-            com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(bytes);
-            com.fasterxml.jackson.databind.JsonNode attrs = root.get("attributes");
+            JsonNode root = mapper.readTree(bytes);
+            JsonNode attrs = root.get("attributes");
             if (attrs != null && attrs.has("labels")) {
-                com.fasterxml.jackson.databind.JsonNode labelsNode = attrs.get("labels");
+                JsonNode labelsNode = attrs.get("labels");
                 List<String> result = new ArrayList<>();
-                for (com.fasterxml.jackson.databind.JsonNode item : labelsNode) {
+                for (JsonNode item : labelsNode) {
                     result.add(item.asText());
                 }
                 return result;
@@ -75,13 +77,13 @@ public interface MultiscaleImage {
         // Try v0.4: labels/.zattrs with {"labels": [...]}
         StoreHandle zattrs = labelsHandle.resolve(Node.ZATTRS);
         if (zattrs.exists()) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = dev.zarr.zarrjava.v2.Node.makeObjectMapper();
+            ObjectMapper mapper = dev.zarr.zarrjava.v2.Node.makeObjectMapper();
             byte[] bytes = Utils.toArray(zattrs.readNonNull());
-            com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(bytes);
+            JsonNode root = mapper.readTree(bytes);
             if (root.has("labels")) {
-                com.fasterxml.jackson.databind.JsonNode labelsNode = root.get("labels");
+                JsonNode labelsNode = root.get("labels");
                 List<String> result = new ArrayList<>();
-                for (com.fasterxml.jackson.databind.JsonNode item : labelsNode) {
+                for (JsonNode item : labelsNode) {
                     result.add(item.asText());
                 }
                 return result;
@@ -107,12 +109,12 @@ public interface MultiscaleImage {
         // Try version >= 0.5: zarr.json with "ome" key
         StoreHandle zarrJson = storeHandle.resolve(Node.ZARR_JSON);
         if (zarrJson.exists()) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = OmeObjectMappers.makeV3Mapper();
+            ObjectMapper mapper = OmeObjectMappers.makeV3Mapper();
             byte[] bytes = Utils.toArray(zarrJson.readNonNull());
-            com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(bytes);
-            com.fasterxml.jackson.databind.JsonNode attrs = root.get("attributes");
+            JsonNode root = mapper.readTree(bytes);
+            JsonNode attrs = root.get("attributes");
             if (attrs != null && attrs.has("ome")) {
-                com.fasterxml.jackson.databind.JsonNode omeNode = attrs.get("ome");
+                JsonNode omeNode = attrs.get("ome");
                 String version = omeNode.has("version") ? omeNode.get("version").asText() : "";
                 if (version.startsWith("0.6")) {
                     return dev.zarr.zarrjava.experimental.ome.v0_6.MultiscaleImage.openMultiscaleImage(storeHandle);
@@ -124,9 +126,9 @@ public interface MultiscaleImage {
         // Try v0.4: .zattrs with "multiscales" key
         StoreHandle zattrs = storeHandle.resolve(Node.ZATTRS);
         if (zattrs.exists()) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = OmeObjectMappers.makeV2Mapper();
+            ObjectMapper mapper = OmeObjectMappers.makeV2Mapper();
             byte[] bytes = Utils.toArray(zattrs.readNonNull());
-            com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(bytes);
+            JsonNode root = mapper.readTree(bytes);
             if (root.has("multiscales")) {
                 return dev.zarr.zarrjava.experimental.ome.v0_4.MultiscaleImage.openMultiscaleImage(storeHandle);
             }

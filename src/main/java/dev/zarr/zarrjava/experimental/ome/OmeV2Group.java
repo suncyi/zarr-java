@@ -1,11 +1,11 @@
 package dev.zarr.zarrjava.experimental.ome;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.Attributes;
 import dev.zarr.zarrjava.store.StoreHandle;
 import dev.zarr.zarrjava.v2.Group;
 import dev.zarr.zarrjava.v2.GroupMetadata;
+import tools.jackson.core.type.TypeReference;
 
 import javax.annotation.Nonnull;
 

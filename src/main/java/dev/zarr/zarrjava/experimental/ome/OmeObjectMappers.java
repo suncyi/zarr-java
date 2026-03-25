@@ -1,13 +1,13 @@
 package dev.zarr.zarrjava.experimental.ome;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.deser.DeserializationProblemHandler;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -17,17 +17,19 @@ final class OmeObjectMappers {
     }
 
     static ObjectMapper makeV2Mapper() {
-        ObjectMapper mapper = dev.zarr.zarrjava.v2.Node.makeObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        mapper.addHandler(new UnknownOmePropertyWarningHandler());
-        return mapper;
+        return dev.zarr.zarrjava.v2.Node.makeObjectMapper()
+                .rebuild()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+                .addHandler(new UnknownOmePropertyWarningHandler())
+                .build();
     }
 
     static ObjectMapper makeV3Mapper() {
-        ObjectMapper mapper = dev.zarr.zarrjava.v3.Node.makeObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        mapper.addHandler(new UnknownOmePropertyWarningHandler());
-        return mapper;
+        return dev.zarr.zarrjava.v3.Node.makeObjectMapper()
+                .rebuild()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+                .addHandler(new UnknownOmePropertyWarningHandler())
+                .build();
     }
 
     private static final class UnknownOmePropertyWarningHandler extends DeserializationProblemHandler {
@@ -38,10 +40,10 @@ final class OmeObjectMappers {
         public boolean handleUnknownProperty(
                 DeserializationContext ctxt,
                 JsonParser p,
-                JsonDeserializer<?> deserializer,
+                ValueDeserializer<?> deserializer,
                 Object beanOrClass,
                 String propertyName
-        ) throws IOException {
+        ) {
             String target = (beanOrClass instanceof Class)
                     ? ((Class<?>) beanOrClass).getName()
                     : beanOrClass.getClass().getName();

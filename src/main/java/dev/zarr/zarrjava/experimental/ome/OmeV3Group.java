@@ -1,6 +1,5 @@
 package dev.zarr.zarrjava.experimental.ome;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import dev.zarr.zarrjava.ZarrException;
 import dev.zarr.zarrjava.core.Attributes;
 import dev.zarr.zarrjava.store.StoreHandle;

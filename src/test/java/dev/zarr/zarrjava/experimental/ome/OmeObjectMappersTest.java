@@ -1,9 +1,9 @@
 package dev.zarr.zarrjava.experimental.ome;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zarr.zarrjava.experimental.ome.metadata.MultiscalesEntry;
 import dev.zarr.zarrjava.experimental.ome.metadata.OmeMetadata;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

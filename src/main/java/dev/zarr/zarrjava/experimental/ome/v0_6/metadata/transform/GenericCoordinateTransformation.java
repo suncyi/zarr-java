@@ -3,7 +3,7 @@ package dev.zarr.zarrjava.experimental.ome.v0_6.metadata.transform;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;

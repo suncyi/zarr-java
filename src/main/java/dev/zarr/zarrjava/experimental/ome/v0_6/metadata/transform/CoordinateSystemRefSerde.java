@@ -1,10 +1,11 @@
 package dev.zarr.zarrjava.experimental.ome.v0_6.metadata.transform;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ final class CoordinateSystemRefSerde {
         }
 
         @Override
-        public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public String deserialize(JsonParser p, DeserializationContext ctxt) {
             JsonToken token = p.currentToken();
             if (token == JsonToken.VALUE_STRING) {
                 return p.getValueAsString();
