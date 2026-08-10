@@ -283,16 +283,17 @@
                     </execution>
                 </executions>
             </plugin>-->
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
                 <version>0.8.0</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <skip>true</skip>
                     <publishingServerId>central</publishingServerId>
-                    <!--<tokenAuth>true</tokenAuth>-->
+                    &lt;!&ndash;<tokenAuth>true</tokenAuth>&ndash;&gt;
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -318,4 +319,14 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>nora</id>
+            <url>http://101.42.2.144:65006/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>nora</id>
+            <url>http://101.42.2.144:65006/maven2</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
