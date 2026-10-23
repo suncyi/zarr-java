@@ -1,6 +1,7 @@
 package dev.zarr.zarrjava.v2.codec;
 
 import dev.zarr.zarrjava.v2.codec.core.BloscCodec;
+import dev.zarr.zarrjava.v2.codec.core.GzipCodec;
 import dev.zarr.zarrjava.v2.codec.core.ZlibCodec;
 import dev.zarr.zarrjava.v2.codec.core.ZstdCodec;
 import tools.jackson.databind.jsontype.NamedType;
@@ -14,6 +15,7 @@ public class CodecRegistry {
 
     static {
         addType("blosc", BloscCodec.class);
+        addType("gzip", GzipCodec.class);
         addType("zlib", ZlibCodec.class);
         addType("zstd", ZstdCodec.class);
     }
