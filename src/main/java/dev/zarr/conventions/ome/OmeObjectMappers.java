@@ -20,7 +20,7 @@ final class OmeObjectMappers {
         return dev.zarr.zarrjava.v2.Node.makeObjectMapper()
                 .rebuild()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-                .addHandler(new UnknownOmePropertyWarningHandler())
+                .addHandler(new UnknownOmePropertyLoggingHandler())
                 .build();
     }
 
@@ -28,7 +28,7 @@ final class OmeObjectMappers {
         return dev.zarr.zarrjava.v3.Node.makeObjectMapper()
                 .rebuild()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-                .addHandler(new UnknownOmePropertyWarningHandler())
+                .addHandler(new UnknownOmePropertyLoggingHandler())
                 .build();
     }
 
