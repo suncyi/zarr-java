@@ -6,7 +6,7 @@
 
     <groupId>dev.zarr</groupId>
     <artifactId>zarr-java</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.0.7</version>
 
     <name>zarr-java</name>
 
@@ -323,11 +323,11 @@
     <distributionManagement>
         <repository>
             <id>nora</id>
-            <url>http://101.42.2.144:65006/maven2</url>
+            <url>http://120.53.15.182:65006/maven2</url>
         </repository>
         <snapshotRepository>
             <id>nora</id>
-            <url>http://101.42.2.144:65006/maven2</url>
+            <url>http://120.53.15.182:65006/maven2</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
